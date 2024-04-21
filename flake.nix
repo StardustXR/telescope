@@ -49,10 +49,19 @@
           '';
         };
         
+        packages.flatscreen = pkgs.writeShellApplication {
+          name = "flatscreen";
+          runtimeInputs = [ self'.packages.default ];
+          text = ''telescope -f'';
+        };
         packages.default = pkgs.writeShellApplication {
           name = "telescope";
           runtimeInputs = [ inputs'.server.packages.default ];
-          text = ''stardust-xr-server -e "${self'.packages.startup_script}/bin/startup_script"'';
+          text = ''stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"'';
+        };
+        apps.flatscreen = {
+          type = "app";
+          program = "${self'.packages.flatscreen}/bin/flatscreen";
         };
         apps.default = {
           type = "app";
