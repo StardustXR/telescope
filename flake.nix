@@ -3,6 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; 
+
+    nixgl = {
+      url = "github:nix-community/nixgl";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     
     server = {
       url = "github:StardustXR/server";
@@ -48,25 +53,66 @@
             gravity -- 0 0.0 -0.5 hexagon_launcher &
           '';
         };
-        
         packages.flatscreen = pkgs.writeShellApplication {
           name = "flatscreen";
-          runtimeInputs = [ self'.packages.default ];
+          runtimeInputs = [ self'.packages.telescope ];
           text = ''telescope -f'';
         };
-        packages.default = pkgs.writeShellApplication {
-          name = "telescope";
-          runtimeInputs = [ inputs'.server.packages.default ];
-          text = ''stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"'';
+        packages.flatscreenNvidia = pkgs.writeShellApplication {
+          name = "flatscreen";
+          runtimeInputs = [ self'.packages.telescopeNvidia ];
+          text = ''telescope -f'';
         };
+        packages.telescope = pkgs.writeShellApplication {
+          name = "telescope";
+          runtimeInputs = [
+            inputs'.server.packages.default
+            # Note: intel is actually a misnomer. It's for all mesa drivers, not just intel
+            # This does mean that NVIDIA proprietary drivers are not supported
+            # NVK, being part of mesa, is supported
+            inputs'.nixgl.packages.nixGLIntel
+            inputs'.nixgl.packages.nixVulkanIntel
+          ];
+          text = ''
+            export LD_LIBRARY_PATH=${
+              pkgs.lib.makeLibraryPath [
+                pkgs.vulkan-loader
+              ]
+            }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+            nixGLIntel nixVulkanIntel stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+          '';
+        };
+        packages.telescopeNvidia = pkgs.writeShellApplication {
+          name = "telescope";
+          runtimeInputs = [
+            inputs'.server.packages.default
+            inputs'.nixgl.packages.nixGLNvidia
+            inputs'.nixgl.packages.nixVulkanNvidia
+            pkgs.vulkan-loader
+          ];
+          text = ''
+            export LD_LIBRARY_PATH=${
+              pkgs.lib.makeLibraryPath [
+                pkgs.vulkan-loader
+              ]
+            }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+            nixGLNvidia nixVulkanNvidia stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+          '';
+        };
+        packages.default = self'.packages.telescope;
         apps.flatscreen = {
           type = "app";
           program = "${self'.packages.flatscreen}/bin/flatscreen";
         };
-        apps.default = {
+        apps.flatscreenNvidia = {
+          type = "app";
+          program = "${self'.packages.flatscreenNvidia}/bin/flatscreen";
+        };
+        apps.telescope = {
           type = "app";
           program = "${self'.packages.default}/bin/telescope";
         };
+        apps.default = self'.apps.telescope;
       };
       flake = {
         # The usual flake attributes can be defined here, including system-
