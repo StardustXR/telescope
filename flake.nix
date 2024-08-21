@@ -2,40 +2,38 @@
   description = "A simple default stardust setup";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixgl = {
       url = "github:nix-community/nixgl";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     server = {
-      url = "github:StardustXR/server";
+      url = "github:StardustXR/server/dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flatland = {
-      url = "github:StardustXR/flatland";
+      url = "github:StardustXR/flatland/dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     protostar = {
-      url = "github:StardustXR/protostar";
+      url = "github:StardustXR/protostar/dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     gravity = {
-      url = "github:StardustXR/gravity";
+      url = "github:StardustXR/gravity/dev";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    black_hole = {
+      url = "github:StardustXR/black-hole";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        # To import a flake module
-        # 1. Add foo to inputs
-        # 2. Add foo as a parameter to the outputs function
-        # 3. Add here: foo.flakeModule
-        
-      ];
+      imports = [];
       systems = [ "aarch64-linux" "x86_64-linux" "riscv64-linux" ];
       perSystem = { config, self', inputs', pkgs, system, ... }:
       {
@@ -46,11 +44,18 @@
             inputs'.flatland.packages.default
             inputs'.protostar.packages.default
             inputs'.gravity.packages.default
+            inputs'.black_hole.packages.default
+            pkgs.xwayland-satellite
           ];
           ## and this is the startup script
           text = ''
+          	xwayland-satellite :10 &
+          	export DISPLAY=:10 &
+           	sleep 0.1;
+
             flatland &
             gravity -- 0 0.0 -0.5 hexagon_launcher &
+            black_hole &
           '';
         };
         packages.flatscreen = pkgs.writeShellApplication {
@@ -114,11 +119,6 @@
         };
         apps.default = self'.apps.telescope;
       };
-      flake = {
-        # The usual flake attributes can be defined here, including system-
-        # agnostic ones like nixosModule and system-enumerating ones, although
-        # those are more easily expressed in perSystem.
-
-      };
+      flake = {};
     };
 }
