@@ -105,6 +105,7 @@
           '';
         };
         packages.default = self'.packages.telescope;
+
         apps.flatscreen = {
           type = "app";
           program = "${self'.packages.flatscreen}/bin/flatscreen";
@@ -115,7 +116,11 @@
         };
         apps.telescope = {
           type = "app";
-          program = "${self'.packages.default}/bin/telescope";
+          program = "${self'.packages.telescope}/bin/telescope";
+        };
+        apps.telescopeNvidia = {
+          type = "app";
+          program = "${self'.packages.telescopeNvidia}/bin/telescope";
         };
         apps.default = self'.apps.telescope;
       };
