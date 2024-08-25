@@ -4,11 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixgl = {
-      url = "github:nix-community/nixgl";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     server = {
       url = "github:StardustXR/server/dev";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,10 +30,12 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [];
       systems = [ "aarch64-linux" "x86_64-linux" "riscv64-linux" ];
-      perSystem = { config, self', inputs', pkgs, system, ... }:
+      perSystem = { config, self', inputs', pkgs, system, ... }: let
+        inherit (pkgs) lib writeShellApplication buildFHSEnv;
+      in
       {
         # edit these to add/remove clients
-        packages.startup_script = pkgs.writeShellApplication {
+        packages.startup_script = writeShellApplication {
           name = "startup_script";
           runtimeInputs = [
             inputs'.flatland.packages.default
@@ -58,51 +55,26 @@
             black_hole &
           '';
         };
-        packages.flatscreen = pkgs.writeShellApplication {
+        packages.flatscreen = writeShellApplication {
           name = "flatscreen";
           runtimeInputs = [ self'.packages.telescope ];
           text = ''telescope -f'';
         };
-        packages.flatscreenNvidia = pkgs.writeShellApplication {
-          name = "flatscreen";
-          runtimeInputs = [ self'.packages.telescopeNvidia ];
-          text = ''telescope -f'';
-        };
-        packages.telescope = pkgs.writeShellApplication {
-          name = "telescope";
+        packages.telescope-unwrapped = writeShellApplication {
+          name = "telescope-unwrapped";
           runtimeInputs = [
             inputs'.server.packages.default
-            # Note: intel is actually a misnomer. It's for all mesa drivers, not just intel
-            # This does mean that NVIDIA proprietary drivers are not supported
-            # NVK, being part of mesa, is supported
-            inputs'.nixgl.packages.nixGLIntel
-            inputs'.nixgl.packages.nixVulkanIntel
           ];
-          text = ''
-            export LD_LIBRARY_PATH=${
-              pkgs.lib.makeLibraryPath [
-                pkgs.vulkan-loader
-              ]
-            }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLIntel nixVulkanIntel stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
-          '';
+          text = ''stardust-xr-server -o 1 -e "${self'.packages.startup_script}" "$@"'';
         };
-        packages.telescopeNvidia = pkgs.writeShellApplication {
+        packages.telescope = buildFHSEnv {
           name = "telescope";
-          runtimeInputs = [
-            inputs'.server.packages.default
-            inputs'.nixgl.packages.nixGLNvidia
-            inputs'.nixgl.packages.nixVulkanNvidia
-            pkgs.vulkan-loader
-          ];
-          text = ''
-            export LD_LIBRARY_PATH=${
-              pkgs.lib.makeLibraryPath [
-                pkgs.vulkan-loader
-              ]
-            }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLNvidia nixVulkanNvidia stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
-          '';
+
+          strictDeps = true;
+
+          targetPkgs = pkgs: [ self'.packages.telescope-unwrapped ] ++ (with pkgs; [ libGL vulkan-loader ]);
+
+          runScript = "${lib.getExe self'.packages.telescope-unwrapped}";
         };
         packages.default = self'.packages.telescope;
 
@@ -117,10 +89,6 @@
         apps.telescope = {
           type = "app";
           program = "${self'.packages.telescope}/bin/telescope";
-        };
-        apps.telescopeNvidia = {
-          type = "app";
-          program = "${self'.packages.telescopeNvidia}/bin/telescope";
         };
         apps.default = self'.apps.telescope;
       };
