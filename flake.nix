@@ -74,21 +74,17 @@
 
           targetPkgs = pkgs: [ self'.packages.telescope-unwrapped ] ++ (with pkgs; [ libGL vulkan-loader ]);
 
-          runScript = "${lib.getExe self'.packages.telescope-unwrapped}";
+          runScript = lib.getExe self'.packages.telescope-unwrapped;
         };
         packages.default = self'.packages.telescope;
 
         apps.flatscreen = {
           type = "app";
-          program = "${self'.packages.flatscreen}/bin/flatscreen";
-        };
-        apps.flatscreenNvidia = {
-          type = "app";
-          program = "${self'.packages.flatscreenNvidia}/bin/flatscreen";
+          program = lib.getExe self'.packages.flatscreen;
         };
         apps.telescope = {
           type = "app";
-          program = "${self'.packages.telescope}/bin/telescope";
+          program = lib.getExe self'.packages.telescope;
         };
         apps.default = self'.apps.telescope;
       };
