@@ -65,7 +65,7 @@
           runtimeInputs = [
             inputs'.server.packages.default
           ];
-          text = ''stardust-xr-server -o 1 -e "${self'.packages.startup_script}" "$@"'';
+          text = ''stardust-xr-server -o 1 -e "${lib.getExe self'.packages.startup_script}" "$@"'';
         };
         packages.telescope = buildFHSEnv {
           name = "telescope";
