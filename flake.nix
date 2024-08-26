@@ -31,7 +31,7 @@
       imports = [];
       systems = [ "aarch64-linux" "x86_64-linux" "riscv64-linux" ];
       perSystem = { config, self', inputs', pkgs, system, ... }: let
-        inherit (pkgs) lib writeShellApplication buildFHSEnv;
+        inherit (pkgs) lib writeShellApplication;
       in
       {
         # edit these to add/remove clients
@@ -60,21 +60,12 @@
           runtimeInputs = [ self'.packages.telescope ];
           text = ''telescope -f'';
         };
-        packages.telescope-unwrapped = writeShellApplication {
-          name = "telescope-unwrapped";
+        packages.telescope = writeShellApplication {
+          name = "telescope";
           runtimeInputs = [
             inputs'.server.packages.default
           ];
           text = ''stardust-xr-server -o 1 -e "${lib.getExe self'.packages.startup_script}" "$@"'';
-        };
-        packages.telescope = buildFHSEnv {
-          name = "telescope";
-
-          strictDeps = true;
-
-          targetPkgs = pkgs: [ self'.packages.telescope-unwrapped ] ++ (with pkgs; [ libGL vulkan-loader ]);
-
-          runScript = lib.getExe self'.packages.telescope-unwrapped;
         };
         packages.default = self'.packages.telescope;
 
