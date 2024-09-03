@@ -55,27 +55,26 @@ cat << EOF > "$BUILD_DIR/AppDir/AppRun"
 exec stardust-xr-server -o 1 -e "/usr/bin/startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/AppDir/AppRun"
-
 # Create desktop file
-cat << EOF > "$BUILD_DIR/AppDir/stardust-xr.desktop"
+cat << EOF > "$BUILD_DIR/AppDir/Telescope.desktop"
 [Desktop Entry]
-Name=Stardust XR
+Name=Telescope
 Exec=AppRun
-Icon=stardust-xr
+Icon=telescope
 Type=Application
 Categories=Utility;
 EOF
 
-# Create icon (you may want to replace this with an actual icon)
-echo "P1 1 1 1" > "$BUILD_DIR/AppDir/stardust-xr.pbm"
+# Download icon
+wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "$BUILD_DIR/AppDir/telescope.png"
 
 # Build AppImage
 ./linuxdeploy-x86_64.AppImage --appdir "$BUILD_DIR/AppDir" --output appimage
 
 # Move AppImage to the current directory
-mv Stardust_XR-x86_64.AppImage .
+mv Telescope-x86_64.AppImage .
 
 # Clean up
 rm -rf "$BUILD_DIR"
 
-echo "AppImage created: Stardust_XR-x86_64.AppImage"
+echo "AppImage created: Telescope-x86_64.AppImage"

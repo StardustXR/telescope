@@ -55,5 +55,5 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v3
         with:
-          name: Stardust_XR-x86_64.AppImage
-          path: Stardust_XR-x86_64.AppImage
+          name: Telescope-x86_64.AppImage
+          path: Telescope-x86_64.AppImage
