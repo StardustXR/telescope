@@ -14,10 +14,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Install OpenXR SDK dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake pkg-config libfontconfig1-dev libgbm-dev libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland libopenxr-dev
+          sudo apt-get install -y build-essential cmake libgl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev
+
+      - name: Build and Install OpenXR SDK
+        run: |
+          wget https://github.com/KhronosGroup/OpenXR-SDK/archive/refs/tags/release-1.1.36.tar.gz
+          tar xzf release-1.1.36.tar.gz
+          cd OpenXR-SDK-release-1.1.36
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make
+          sudo make install
+
+      - name: Install Stardust/Rust dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libfontconfig1-dev libgbm-dev libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
