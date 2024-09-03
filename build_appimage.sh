@@ -39,20 +39,20 @@ install_musl "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
 # Create startup script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 #!/bin/bash
-xwayland-satellite :10 &
-export DISPLAY=:10
-sleep 0.1
+# xwayland-satellite :10 &
+# export DISPLAY=:10
+# sleep 0.1
 
-flatland &
-gravity -- 0 0.0 -0.5 hexagon_launcher &
-black_hole &
+usr/bin/flatland &
+usr/bin/gravity -- 0 0.0 -0.5 usr/bin/hexagon_launcher &
+usr/bin/black_hole &
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 
 # Create AppRun script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 #!/bin/bash
-exec stardust-xr-server -o 1 -e "/usr/bin/startup_script" "\$@"
+exec usr/bin/stardust-xr-server -o 1 -e "/usr/bin/startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
 
@@ -68,11 +68,6 @@ EOF
 
 # Download icon
 wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "$BUILD_DIR/Telescope.AppDir/stardust.png"
-
-# Remove hard-coded paths
-cd "$BUILD_DIR/Telescope.AppDir/usr/"
-find . -type f -exec sed -i -e 's#/usr#././#g' {} \;
-cd -
 
 # Create AppImage
 ./appimagetool "$BUILD_DIR/Telescope.AppDir" Telescope-x86_64.AppImage
