@@ -43,16 +43,16 @@ cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 # export DISPLAY=:10
 # sleep 0.1
 
-usr/bin/flatland &
-usr/bin/gravity -- 0 0.0 -0.5 usr/bin/hexagon_launcher &
-usr/bin/black_hole &
+$APPDIR/usr/bin/flatland &
+$APPDIR/usr/bin/gravity -- 0 0.0 -0.5 $APPDIR/usr/bin/hexagon_launcher &
+$APPDIR/usr/bin/black_hole &
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 
 # Create AppRun script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 #!/bin/bash
-exec usr/bin/stardust-xr-server -o 1 -e "/usr/bin/startup_script" "\$@"
+exec $APPDIR/usr/bin/stardust-xr-server -o 1 -e "$APPDIR/usr/bin/startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
 
