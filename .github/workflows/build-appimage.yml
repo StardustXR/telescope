@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake pkg-config libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland libopenxr-dev
+          sudo apt-get install -y cmake pkg-config libfontconfig1-dev libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland libopenxr-dev
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
