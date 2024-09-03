@@ -33,7 +33,7 @@ jobs:
       - name: Install Stardust/Rust dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pkg-config libfontconfig1-dev libgbm-dev libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland
+          sudo apt-get install -y pkg-config libfontconfig1-dev libgbm-dev libglvnd-dev libxcb-ewmh-dev libxfixes-dev libxcb-icccm4-dev libxcb-res0-dev xwayland
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
