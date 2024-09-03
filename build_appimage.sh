@@ -32,7 +32,7 @@ install_server "499aa2be28be546287bf228e8edc3643b09e4016"
 
 # Install clients with musl
 install_musl "flatland" "d2b0b6c83f4a52cf4206a04df7c4aa941fb6ae8b"
-install_musl "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219"
+cargo install --git "https://github.com/StardustXR/protostar.git" --rev "39499a061af74c3a2d5e1e46e4ad21aca5727219" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/AppDir/usr" hexagon_launcher
 install_musl "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
 install_musl "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
 
