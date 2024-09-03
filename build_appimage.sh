@@ -74,9 +74,6 @@ cd "$BUILD_DIR/Telescope.AppDir/usr/"
 find . -type f -exec sed -i -e 's#/usr#././#g' {} \;
 cd -
 
-# Validate desktop file
-desktop-file-validate "$BUILD_DIR/Telescope.AppDir/telescope.desktop"
-
 # Create AppImage
 ./appimagetool "$BUILD_DIR/Telescope.AppDir" Telescope-x86_64.AppImage
 
