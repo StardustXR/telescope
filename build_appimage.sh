@@ -19,7 +19,6 @@ install_server() {
 
     echo "Installing server with glibc..."
     cargo install --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "$BUILD_DIR/AppDir/usr"
-    mv "$BUILD_DIR/AppDir/usr/bin/server" "$BUILD_DIR/AppDir/usr/bin/stardust-xr-server"
 }
 
 # Create a temporary build directory
