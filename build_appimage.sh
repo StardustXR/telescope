@@ -35,15 +35,6 @@ clone_and_build_server() {
 BUILD_DIR=$(mktemp -d)
 cd "$BUILD_DIR"
 
-# Install dependencies
-sudo apt-get update
-sudo apt-get install -y cmake pkg-config libglvnd-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-res0-dev xwayland
-
-# Install Rust and add the musl target
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source $HOME/.cargo/env
-rustup target add x86_64-unknown-linux-musl
-
 # Create AppDir structure
 mkdir -p AppDir/usr/bin AppDir/usr/lib
 
@@ -88,10 +79,6 @@ EOF
 
 # Create icon (you may want to replace this with an actual icon)
 echo "P1 1 1 1" > AppDir/stardust-xr.pbm
-
-# Download linuxdeploy
-wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-chmod +x linuxdeploy-x86_64.AppImage
 
 # Build AppImage
 ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
