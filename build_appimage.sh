@@ -52,7 +52,7 @@ chmod +x "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 # Create AppRun script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 #!/bin/bash
-echo $APPDIR
+env
 stardust-xr-server -o 1 -e "startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
