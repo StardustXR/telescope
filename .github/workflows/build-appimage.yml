@@ -42,8 +42,8 @@ jobs:
 
       - name: Build AppImage
         run: |
-          chmod +x telescope/build_appimage.sh
-          ./telescope/build_appimage.sh
+          chmod +x build_appimage.sh
+          ./build_appimage.sh
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v3
