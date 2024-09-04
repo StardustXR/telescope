@@ -3,14 +3,39 @@
 set -e
 set -x
 
-# Function to install a repository with musl
-install_musl() {
+# Function to install a repository with musl and custom binary name
+install_client_multi() {
     local repo=$1
     local revision=$2
-    local binary_name=${repo//-/_}  # Replace hyphens with underscores
+    local package_name=$3
 
     echo "Installing $repo with musl..."
-    cargo install --git "https://github.com/StardustXR/$repo.git" --rev "$revision" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
+    git clone "https://github.com/StardustXR/$repo.git" "$BUILD_DIR/$repo"
+    cd "$BUILD_DIR/$repo"
+    git checkout "$revision"
+    # Check if it's a workspace or a single package
+    if [ -f "Cargo.toml" ] && grep -q '^\[workspace\]' Cargo.toml; then
+        # It's a workspace, assume the package is there and try to cd into it
+        cd "$repo" || echo "Failed to cd into $repo, continuing..."
+    fi
+
+    cargo install --path . --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr" $package_name
+
+    # install resources
+    if [ -d "res" ]; then
+        mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/share"
+        cp -r res/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
+    fi
+
+    cd "$BUILD_DIR"
+    rm -rf "$BUILD_DIR/$repo"
+}
+
+# Function to install a repository with musl
+install_client() {
+    local repo=$1
+    local revision=$2
+    install_client_multi "$repo" "$revision" "${repo//-/_}"
 }
 
 # Function to install the server with glibc
@@ -31,10 +56,10 @@ mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/bin" "$BUILD_DIR/Telescope.AppDir/usr/
 install_server "499aa2be28be546287bf228e8edc3643b09e4016"
 
 # Install clients with musl
-install_musl "flatland" "d2b0b6c83f4a52cf4206a04df7c4aa941fb6ae8b"
-cargo install --git "https://github.com/StardustXR/protostar.git" --rev "39499a061af74c3a2d5e1e46e4ad21aca5727219" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr" hexagon_launcher
-install_musl "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
-install_musl "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
+install_client "flatland" "d2b0b6c83f4a52cf4206a04df7c4aa941fb6ae8b"
+install_client_multi "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219" "hexagon_launcher"
+install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
+install_client "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
 
 # Create startup script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
@@ -55,6 +80,7 @@ cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 # Set up environment variables
 export PATH="\$APPDIR/usr/bin:\$PATH"
 export XDG_DATA_DIRS="\$APPDIR/usr/share:\$XDG_DATA_DIRS"
+export STARDUST_THEMES="\$APPDIR/usr/share"
 stardust-xr-server -o 1 -e "startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"

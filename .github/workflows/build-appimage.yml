@@ -53,7 +53,7 @@ jobs:
           ./build_appimage.sh
 
       - name: Upload AppImage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Telescope-x86_64.AppImage
           path: Telescope-x86_64.AppImage
