@@ -80,7 +80,7 @@ cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 export PATH="\$APPDIR/usr/bin:\$PATH"
 export XDG_DATA_DIRS="\$APPDIR/usr/share:\$XDG_DATA_DIRS"
 export STARDUST_THEMES="\$APPDIR/usr/share"
-stardust-xr-server -o 1 -e "startup_script" "\$@"
+stardust-xr-server -o 1 -e "\$APPDIR/usr/bin/startup_script" "\$@"
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
 
