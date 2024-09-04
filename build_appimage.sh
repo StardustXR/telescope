@@ -13,6 +13,11 @@ install_client_multi() {
     local repo_dir="$BUILD_DIR/$repo"
     git -C "$repo_dir" checkout "$revision"
 
+    # install resources
+    if [ -d "$repo_dir/res" ]; then
+        cp -r "$repo_dir/res"/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
+    fi
+
     # Check if it's a workspace or a single package
     if [ -f "$repo_dir/Cargo.toml" ] && grep -q '^\[workspace\]' "$repo_dir/Cargo.toml"; then
         # It's a workspace, assume the package is there
@@ -21,11 +26,6 @@ install_client_multi() {
 
     cargo install --path "$repo_dir" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
 
-    # install resources
-    if [ -d "$repo_dir/res" ]; then
-        mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/share"
-        cp -r "$repo_dir/res"/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
-    fi
 
     rm -rf "$BUILD_DIR/$repo"
 }
@@ -49,10 +49,10 @@ install_server() {
 BUILD_DIR=$(mktemp -d)
 
 # Create AppDir structure
-mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/bin" "$BUILD_DIR/Telescope.AppDir/usr/lib"
+mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/bin" "$BUILD_DIR/Telescope.AppDir/usr/lib" "$BUILD_DIR/Telescope.AppDir/usr/share"
 
 # Install server with glibc
-install_server "499aa2be28be546287bf228e8edc3643b09e4016"
+install_server "4683710f095310317633d6aed495d835a5fa609c"
 
 # Install clients with musl
 install_client "flatland" "d2b0b6c83f4a52cf4206a04df7c4aa941fb6ae8b"
