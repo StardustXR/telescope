@@ -95,7 +95,7 @@
                 pkgs.vulkan-loader
               ]
             }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLIntel nixVulkanIntel stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+            nixGLIntel nixVulkanIntel stardust-xr-server -d -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
           '';
         };
         packages.telescopeNvidia = pkgs.writeShellApplication {
@@ -117,7 +117,7 @@
                 pkgs.vulkan-loader
               ]
             }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLNvidia nixVulkanNvidia stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+            nixGLNvidia nixVulkanNvidia stardust-xr-server -d -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
           '';
         };
         packages.default = self'.packages.telescope;
