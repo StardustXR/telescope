@@ -2,7 +2,6 @@
 
 set -e
 set -x
-
 # Function to install a repository with musl and custom binary name
 install_client_multi() {
     local repo=$1
@@ -13,13 +12,14 @@ install_client_multi() {
     git clone "https://github.com/StardustXR/$repo.git" "$BUILD_DIR/$repo"
     cd "$BUILD_DIR/$repo"
     git checkout "$revision"
+
     # Check if it's a workspace or a single package
     if [ -f "Cargo.toml" ] && grep -q '^\[workspace\]' Cargo.toml; then
         # It's a workspace, assume the package is there and try to cd into it
-        cd "$repo" || echo "Failed to cd into $repo, continuing..."
+        cd "$package_name" || echo "Failed to cd into $package_name, continuing..."
     fi
 
-    cargo install --path . --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr" $package_name
+    cargo install --path . --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
 
     # install resources
     if [ -d "res" ]; then
