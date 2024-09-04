@@ -10,24 +10,23 @@ install_client_multi() {
 
     echo "Installing $repo with musl..."
     git clone "https://github.com/StardustXR/$repo.git" "$BUILD_DIR/$repo"
-    cd "$BUILD_DIR/$repo"
-    git checkout "$revision"
+    local repo_dir="$BUILD_DIR/$repo"
+    git -C "$repo_dir" checkout "$revision"
 
     # Check if it's a workspace or a single package
-    if [ -f "Cargo.toml" ] && grep -q '^\[workspace\]' Cargo.toml; then
-        # It's a workspace, assume the package is there and try to cd into it
-        cd "$package_name" || echo "Failed to cd into $package_name, continuing..."
+    if [ -f "$repo_dir/Cargo.toml" ] && grep -q '^\[workspace\]' "$repo_dir/Cargo.toml"; then
+        # It's a workspace, assume the package is there
+        repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --path . --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
+    cargo install --path "$repo_dir" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
 
     # install resources
-    if [ -d "res" ]; then
+    if [ -d "$repo_dir/res" ]; then
         mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/share"
-        cp -r res/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
+        cp -r "$repo_dir/res"/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
     fi
 
-    cd "$BUILD_DIR"
     rm -rf "$BUILD_DIR/$repo"
 }
 
