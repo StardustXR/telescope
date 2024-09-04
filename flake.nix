@@ -61,7 +61,7 @@
 
             flatland &
             gravity -- 0 0.0 -0.5 hexagon_launcher &
-            black_hole &
+            black-hole &
           '';
         };
         packages.flatscreen = pkgs.writeShellApplication {
