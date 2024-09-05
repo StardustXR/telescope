@@ -41,7 +41,7 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-    cargo install --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "$BUILD_DIR/Telescope.AppDir/usr"
+    cargo install --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "$BUILD_DIR/Telescope.AppDir/usr"
 }
 
 # Function to include system libraries in the AppImage
