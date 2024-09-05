@@ -89,13 +89,13 @@ include_system_library "libbrotlicommon.so.1"
 include_system_library "libpcre2-8.so.0"
 
 # Install server with glibc
-install_server "4683710f095310317633d6aed495d835a5fa609c"
+install_server "c12300e756693c16a4d0d3716a9d89c9178da96a"
 
 # Install clients with musl
-install_client "flatland" "d2b0b6c83f4a52cf4206a04df7c4aa941fb6ae8b"
+install_client "flatland" "b83f2eced868fe71248ba7681df978698eb978f0"
 install_client_multi "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219" "hexagon_launcher"
 install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
-install_client "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
+install_client "black-hole" "0b847b6ddc383bfcc1e133a2238a37ce8202fe95"
 
 # Create startup script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
