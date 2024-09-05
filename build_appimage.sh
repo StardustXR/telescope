@@ -29,7 +29,6 @@ install_client_multi() {
 
     rm -rf "$BUILD_DIR/$repo"
 }
-
 # Function to install a repository with musl
 install_client() {
     local repo=$1
@@ -45,11 +44,49 @@ install_server() {
     cargo install --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "$BUILD_DIR/Telescope.AppDir/usr"
 }
 
+# Function to include system libraries in the AppImage
+include_system_library() {
+    local library=$1
+    echo "Including system library: $library"
+    cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "$BUILD_DIR/Telescope.AppDir/usr/lib/"
+}
+
 # Create a temporary build directory
 BUILD_DIR=$(mktemp -d)
 
 # Create AppDir structure
 mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/bin" "$BUILD_DIR/Telescope.AppDir/usr/lib" "$BUILD_DIR/Telescope.AppDir/usr/share"
+
+# Include system libraries
+include_system_library "libxkbcommon.so.0"
+include_system_library "libstdc++.so.6"
+include_system_library "libopenxr_loader.so.1"
+include_system_library "libX11.so.6"
+include_system_library "libXfixes.so.3"
+include_system_library "libgbm.so.1"
+include_system_library "libfontconfig.so.1"
+include_system_library "libgcc_s.so.1"
+include_system_library "libjsoncpp.so.25"
+include_system_library "libxcb.so.1"
+include_system_library "libGLdispatch.so.0"
+include_system_library "libdrm.so.2"
+include_system_library "libwayland-server.so.0"
+include_system_library "libexpat.so.1"
+include_system_library "libxcb-randr.so.0"
+include_system_library "libfreetype.so.6"
+include_system_library "libxml2.so.2"
+include_system_library "libXau.so.6"
+include_system_library "libffi.so.8"
+include_system_library "libz.so.1"
+include_system_library "libbz2.so.1"
+include_system_library "libpng16.so.16"
+include_system_library "libharfbuzz.so.0"
+include_system_library "libbrotlidec.so.1"
+include_system_library "liblzma.so.5"
+include_system_library "libglib-2.0.so.0"
+include_system_library "libgraphite2.so.3"
+include_system_library "libbrotlicommon.so.1"
+include_system_library "libpcre2-8.so.0"
 
 # Install server with glibc
 install_server "4683710f095310317633d6aed495d835a5fa609c"
@@ -63,24 +100,25 @@ install_client "black-hole" "875603d95bee7c4eb41a6aa7e16e3d5827e2098d"
 # Create startup script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 #!/bin/bash
+export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
 # xwayland-satellite :10 &
 # export DISPLAY=:10
-# sleep 0.1
 
-flatland &
-gravity -- 0 0.0 -0.5 hexagon_launcher &
-black_hole &
+\$TELESCOPE_PATH/flatland &
+\$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
+\$TELESCOPE_PATH/black_hole &
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
 
 # Create AppRun script
 cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
 #!/bin/bash
-# Set up environment variables
-export PATH="\$APPDIR/usr/bin:\$PATH"
-export XDG_DATA_DIRS="\$APPDIR/usr/share:\$XDG_DATA_DIRS"
+export TELESCOPE_PATH="\$APPDIR/usr/bin"
+export OLD_LD_LIBRARY_PATH="\$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="\$APPDIR/usr/lib:\$OLD_LD_LIBRARY_PATH"
 export STARDUST_THEMES="\$APPDIR/usr/share"
-stardust-xr-server -o 1 -e "\$APPDIR/usr/bin/startup_script" "\$@"
+
+\$TELESCOPE_PATH/stardust-xr-server -e "\$TELESCOPE_PATH/startup_script" \$@
 EOF
 chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
 
