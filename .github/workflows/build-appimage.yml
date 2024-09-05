@@ -38,12 +38,14 @@ jobs:
       - name: Set up Rust (gnu)
         uses: actions-rs/toolchain@v1
         with:
+          toolchain: stable
           profile: minimal
           target: x86_64-unknown-linux-gnu
 
       - name: Set up Rust (musl)
         uses: actions-rs/toolchain@v1
         with:
+          toolchain: stable
           profile: minimal
           target: x86_64-unknown-linux-musl
 
