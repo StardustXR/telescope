@@ -89,7 +89,7 @@ include_system_library "libbrotlicommon.so.1"
 include_system_library "libpcre2-8.so.0"
 
 # Install server with glibc
-install_server "c12300e756693c16a4d0d3716a9d89c9178da96a"
+install_server "71c30a05b87a8f23929ad380b3fa195b693bb4fa"
 
 # Install clients with musl
 install_client "flatland" "b83f2eced868fe71248ba7681df978698eb978f0"
