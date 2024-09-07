@@ -41,14 +41,14 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-    cargo install --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "$BUILD_DIR/Telescope.AppDir/usr"
+    cargo install --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 }
 
 # Function to include system libraries in the AppImage
 include_system_library() {
     local library=$1
     echo "Including system library: $library"
-    cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "$BUILD_DIR/Telescope.AppDir/usr/lib/"
+    cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "Telescope.AppDir/usr/lib/"
 }
 
 # Create AppDir structure
@@ -133,7 +133,7 @@ EOF
 wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "Telescope.AppDir/stardust.png"
 
 # Create tarball of AppDir
-tar -czvf Telescope-x86_64.tar.gz -C "$BUILD_DIR" Telescope.AppDir
+tar -czvf Telescope-x86_64.tar.gz Telescope.AppDir
 
 # Create AppImage
 ./appimagetool "Telescope.AppDir" Telescope-x86_64.AppImage
