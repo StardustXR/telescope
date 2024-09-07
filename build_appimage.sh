@@ -135,8 +135,12 @@ EOF
 # Download icon
 wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "$BUILD_DIR/Telescope.AppDir/stardust.png"
 
+# Create tarball of AppDir
+tar -czvf Telescope-x86_64.tar.gz -C "$BUILD_DIR" Telescope.AppDir
+
 # Create AppImage
 ./appimagetool "$BUILD_DIR/Telescope.AppDir" Telescope-x86_64.AppImage
+
 
 # Clean up
 rm -rf "$BUILD_DIR"

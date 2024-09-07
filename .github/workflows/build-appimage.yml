@@ -58,9 +58,14 @@ jobs:
         run: |
           chmod +x build_appimage.sh
           ./build_appimage.sh
-
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
           name: Telescope-x86_64.AppImage
           path: Telescope-x86_64.AppImage
+
+      - name: Upload tar.gz
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telescope-x86_64.tar.gz
+          path: Telescope-x86_64.tar.gz
