@@ -9,13 +9,13 @@ install_client_multi() {
     local package_name=$3
 
     echo "Installing $repo with musl..."
-    git clone "https://github.com/StardustXR/$repo.git" "$BUILD_DIR/$repo"
-    local repo_dir="$BUILD_DIR/$repo"
+    git clone "https://github.com/StardustXR/$repo.git" "$repo"
+    local repo_dir="$repo"
     git -C "$repo_dir" checkout "$revision"
 
     # install resources
     if [ -d "$repo_dir/res" ]; then
-        cp -r "$repo_dir/res"/* "$BUILD_DIR/Telescope.AppDir/usr/share/"
+        cp -r "$repo_dir/res"/* "Telescope.AppDir/usr/share/"
     fi
 
     # Check if it's a workspace or a single package
@@ -24,10 +24,10 @@ install_client_multi() {
         repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --path "$repo_dir" --target x86_64-unknown-linux-musl --root "$BUILD_DIR/Telescope.AppDir/usr"
+    cargo install --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
 
 
-    rm -rf "$BUILD_DIR/$repo"
+    rm -rf "$repo"
 }
 # Function to install a repository with musl
 install_client() {
@@ -51,11 +51,8 @@ include_system_library() {
     cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "$BUILD_DIR/Telescope.AppDir/usr/lib/"
 }
 
-# Create a temporary build directory
-BUILD_DIR=$(mktemp -d)
-
 # Create AppDir structure
-mkdir -p "$BUILD_DIR/Telescope.AppDir/usr/bin" "$BUILD_DIR/Telescope.AppDir/usr/lib" "$BUILD_DIR/Telescope.AppDir/usr/share"
+mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir/usr/share"
 
 # Include system libraries
 include_system_library "libxkbcommon.so.0"
@@ -98,7 +95,7 @@ install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
 install_client "black-hole" "0b847b6ddc383bfcc1e133a2238a37ce8202fe95"
 
 # Create startup script
-cat << EOF > "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
+cat << EOF > "Telescope.AppDir/usr/bin/startup_script"
 #!/bin/bash
 export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
 # xwayland-satellite :10 &
@@ -108,10 +105,10 @@ export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
 \$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
 \$TELESCOPE_PATH/black_hole &
 EOF
-chmod +x "$BUILD_DIR/Telescope.AppDir/usr/bin/startup_script"
+chmod +x "Telescope.AppDir/usr/bin/startup_script"
 
 # Create AppRun script
-cat << EOF > "$BUILD_DIR/Telescope.AppDir/AppRun"
+cat << EOF > "Telescope.AppDir/AppRun"
 #!/bin/bash
 export TELESCOPE_PATH="\$APPDIR/usr/bin"
 export OLD_LD_LIBRARY_PATH="\$LD_LIBRARY_PATH"
@@ -120,10 +117,10 @@ export STARDUST_THEMES="\$APPDIR/usr/share"
 
 \$TELESCOPE_PATH/stardust-xr-server -e "\$TELESCOPE_PATH/startup_script" \$@
 EOF
-chmod +x "$BUILD_DIR/Telescope.AppDir/AppRun"
+chmod +x "Telescope.AppDir/AppRun"
 
 # Create desktop file
-cat << EOF > "$BUILD_DIR/Telescope.AppDir/telescope.desktop"
+cat << EOF > "Telescope.AppDir/telescope.desktop"
 [Desktop Entry]
 Name=Telescope
 Exec=AppRun
@@ -133,16 +130,12 @@ Categories=Utility;
 EOF
 
 # Download icon
-wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "$BUILD_DIR/Telescope.AppDir/stardust.png"
+wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "Telescope.AppDir/stardust.png"
 
 # Create tarball of AppDir
 tar -czvf Telescope-x86_64.tar.gz -C "$BUILD_DIR" Telescope.AppDir
 
 # Create AppImage
-./appimagetool "$BUILD_DIR/Telescope.AppDir" Telescope-x86_64.AppImage
-
-
-# Clean up
-rm -rf "$BUILD_DIR"
+./appimagetool "Telescope.AppDir" Telescope-x86_64.AppImage
 
 echo "AppImage created: Telescope-x86_64.AppImage"
