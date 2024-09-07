@@ -89,7 +89,7 @@ include_system_library "libpcre2-8.so.0"
 install_server "71c30a05b87a8f23929ad380b3fa195b693bb4fa"
 
 # Install clients with musl
-install_client "flatland" "b83f2eced868fe71248ba7681df978698eb978f0"
+install_client "flatland" "cf001fe2ca8f0384f71567981a9ab91b4db9a1f3"
 install_client_multi "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219" "hexagon_launcher"
 install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
 install_client "black-hole" "0b847b6ddc383bfcc1e133a2238a37ce8202fe95"
