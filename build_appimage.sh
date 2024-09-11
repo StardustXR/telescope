@@ -24,7 +24,7 @@ install_client_multi() {
         repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
+    cargo install --locked --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
 
 
     rm -rf "$repo"
@@ -41,7 +41,7 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-    cargo install --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
+    cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 }
 
 # Function to include system libraries in the AppImage
