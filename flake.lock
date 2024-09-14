@@ -417,11 +417,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1724215751,
-        "narHash": "sha256-FF5qhPdlxc71ILJBKFGCDCIm4I0M9BQpKFjn0nPopgw=",
+        "lastModified": 1725441283,
+        "narHash": "sha256-/auxbL5TNvIVD2UpzRWgLlbFxOmczmC26F+IWUHDdK0=",
         "owner": "StardustXR",
         "repo": "server",
-        "rev": "499aa2be28be546287bf228e8edc3643b09e4016",
+        "rev": "4683710f095310317633d6aed495d835a5fa609c",
         "type": "github"
       },
       "original": {

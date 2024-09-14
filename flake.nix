@@ -49,13 +49,19 @@
           ];
           ## and this is the startup script
           text = ''
-          	xwayland-satellite :10 &
-          	export DISPLAY=:10 &
-           	sleep 0.1;
+            unset LD_LIBRARY_PATH
+            if [[ -v LD_LIBRARY_PATH_ORIGINAL ]]; then
+              echo "Restored pre-exisiting LD_LIBRARY_PATH"
+              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH_ORIGINAL"
+            fi
+
+            xwayland-satellite :10 &
+            export DISPLAY=:10 &
+            sleep 0.1;
 
             flatland &
             gravity -- 0 0.0 -0.5 hexagon_launcher &
-            black_hole &
+            black-hole &
           '';
         };
         packages.flatscreen = pkgs.writeShellApplication {
@@ -79,12 +85,17 @@
             inputs'.nixgl.packages.nixVulkanIntel
           ];
           text = ''
+            if [[ -v LD_LIBRARY_PATH ]]; then
+              echo "Saved pre-exisiting LD_LIBRARY_PATH"
+              export LD_LIBRARY_PATH_ORIGINAL="$LD_LIBRARY_PATH"
+            fi
+
             export LD_LIBRARY_PATH=${
               pkgs.lib.makeLibraryPath [
                 pkgs.vulkan-loader
               ]
             }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLIntel nixVulkanIntel stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+            nixGLIntel nixVulkanIntel stardust-xr-server -d -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
           '';
         };
         packages.telescopeNvidia = pkgs.writeShellApplication {
@@ -96,12 +107,17 @@
             pkgs.vulkan-loader
           ];
           text = ''
+            if [[ -v LD_LIBRARY_PATH ]]; then
+              echo "Saved pre-exisiting LD_LIBRARY_PATH"
+              export LD_LIBRARY_PATH_ORIGINAL="$LD_LIBRARY_PATH"
+            fi
+
             export LD_LIBRARY_PATH=${
               pkgs.lib.makeLibraryPath [
                 pkgs.vulkan-loader
               ]
             }"''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            nixGLNvidia nixVulkanNvidia stardust-xr-server -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
+            nixGLNvidia nixVulkanNvidia stardust-xr-server -d -o 1 -e "${self'.packages.startup_script}/bin/startup_script" "$@"
           '';
         };
         packages.default = self'.packages.telescope;
