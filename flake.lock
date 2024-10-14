@@ -183,21 +183,6 @@
         "type": "indirect"
       }
     },
-    "flake-utils": {
-      "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "flatland": {
       "inputs": {
         "crane": "crane_2",
@@ -277,27 +262,6 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "hercules-ci-effects",
-        "type": "github"
-      }
-    },
-    "nixgl": {
-      "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1713543440,
-        "narHash": "sha256-lnzZQYG0+EXl/6NkGpyIz+FEOc/DSEG57AP1VsdeNrM=",
-        "owner": "nix-community",
-        "repo": "nixgl",
-        "rev": "310f8e49a149e4c9ea52f1adf70cdc768ec53f8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixgl",
         "type": "github"
       }
     },
@@ -401,7 +365,6 @@
         "flake-parts": "flake-parts",
         "flatland": "flatland",
         "gravity": "gravity",
-        "nixgl": "nixgl",
         "nixpkgs": "nixpkgs",
         "protostar": "protostar",
         "server": "server"
