@@ -1,0 +1,9 @@
+#!/bin/bash
+
+xwayland-satellite :10 &
+export DISPLAY=:10 &
+sleep 0.1;
+
+flatland &
+gravity -- 0 0.0 -0.5 hexagon_launcher &
+black_hole &

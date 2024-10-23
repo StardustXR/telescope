@@ -1,0 +1,3 @@
+#!/bin/bash
+
+stardust-xr-server -o 1 -e "telescope_startup" "$@"
