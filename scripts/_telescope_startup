@@ -6,4 +6,4 @@ sleep 0.1;
 
 flatland &
 gravity -- 0 0.0 -0.5 hexagon_launcher &
-black_hole &
+black-hole &
