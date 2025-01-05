@@ -115,7 +115,7 @@ export OLD_LD_LIBRARY_PATH="\$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="\$APPDIR/usr/lib:\$OLD_LD_LIBRARY_PATH"
 export STARDUST_THEMES="\$APPDIR/usr/share"
 
-\$TELESCOPE_PATH/stardust-xr-server -e "\$TELESCOPE_PATH/startup_script" \$@
+\$TELESCOPE_PATH/stardust-xr-server -o 1 -e "\$TELESCOPE_PATH/startup_script" \$@
 EOF
 chmod +x "Telescope.AppDir/AppRun"
 
