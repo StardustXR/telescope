@@ -103,7 +103,7 @@ export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
 
 \$TELESCOPE_PATH/flatland &
 \$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
-\$TELESCOPE_PATH/black_hole &
+\$TELESCOPE_PATH/black-hole &
 EOF
 chmod +x "Telescope.AppDir/usr/bin/startup_script"
 
