@@ -16,31 +16,41 @@ Then install Telescope using:
 sudo dnf install telescope
 ```
 
-On Arch Linux, Stardust XR is available in the Arch Linux User Repository [AUR](https://aur.archlinux.org/packages/stardust-xr-telescope). We suggest using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers), like Paru:
+On **Arch Linux**, Stardust XR is available in the Arch Linux User Repository [AUR](https://aur.archlinux.org/packages/stardust-xr-telescope). We suggest using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers), like Paru:
 ```
 paru -S stardust-xr-telescope
 ```
-<h1>
-  <img src="/img/docs/nixos.svg" alt="Logo" style={{ verticalAlign: 'middle', height: '1em', marginRight: '0.5em' }} />
-  NixOS 
-</h1>
-
 On NixOS, use the [Nix package manager](https://nixos.org/download/#nix-install-linux) Make sure [flakes are enabled](https://nixos.wiki/wiki/flakes).
 
 ```
 nix run github:StardustXR/telescope
 ```
 # After Installation
-From here, just run `telescope -f` for flatscreen mode in your terminal! 
+From here, just run `telescope -f` in your terminal for flatscreen mode!  
 
-You will see a floating hexagon with the Stardust XR logo in the center, this is Hexagon Launcher.
-To move around, hold down ***Shift*** and ***W A S D***, with ***Q*** for moving down and ***E*** for moving up.  
-![WASD Q E Look around](/img/updated_flat_wasd.GIF)
+### Flatscreen Navigation
+A video guide showcasing flatscreen controls is available [here](https://www.youtube.com/watch?v=JCYecSlKlDI)  
 
-To look around, hold down ***Shift*** and ***Right Click*** while moving the mouse.  
-![Look around](/img/updated_flat_look.GIF)
+To move around, hold down `Shift + W A S D`, with `Q` for moving down and `E` for moving up.
+![wasd](https://github.com/StardustXR/website/blob/main/static/img/updated_flat_wasd.GIF)
 
-If you click on the hexagon, the launcher will open. Try dragging one of the apps with `Shift + ~`. The small minus sign is Black Hole, if you click it, it will grab any open window and store it away. Click it again and they will return to their original location.  
-![Flat drag](/img/updated_flat_drag.GIF)
+To look around, hold down `Shift + Right` Click while moving the mouse. 
+![updated_look](https://github.com/StardustXR/website/blob/main/static/img/updated_flat_look.GIF)
 
-If you are already using OpenXR within Linux, running `telescope` while OpenXR is running should launch Stardust on your headset. If not, check further instructions for setting up OpenXR.
+To drag applications out of the app launcher, hold down `Shift + ~`
+![updated_drag](https://github.com/StardustXR/website/blob/main/static/img/updated_flat_drag.GIF)
+
+### XR Navigation
+Run `telescope` and if it detects an XR headset is running, it should launch within it.
+
+A video guide showcasing XR controls is available [here](https://www.youtube.com/watch?v=RbxFq6JjliA)  
+
+**Quest 3 Hand tracking**:
+Pinch to drag and drop, grasp with full hand for grabbing, point and click with pointer finger to click or pinch from a distance  
+
+![hand_pinching](https://github.com/StardustXR/website/blob/main/static/img/hand_pinching.GIF)
+
+**Quest 3 Controller**:
+Grab with the grip buttons, click by touching the tip of the cones or by using the trigger from a distance  
+
+![controller_click](https://github.com/StardustXR/website/blob/main/static/img/controller_click.GIF)
