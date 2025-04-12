@@ -25,6 +25,9 @@ On NixOS, use the [Nix package manager](https://nixos.org/download/#nix-install-
 ```
 nix run github:StardustXR/telescope
 ```
+
+An [appimage](https://github.com/StardustXR/telescope/releases) is also available for download
+
 # After Installation
 From here, just run `telescope -f` in your terminal for flatscreen mode!  
 
