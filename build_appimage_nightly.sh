@@ -98,6 +98,6 @@ if [ ! -e "./appimagetool" ]; then
 	wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage -O appimagetool
 	chmod u+x appimagetool
 fi
-./appimagetool "Telescope-Nightly.AppDir" Telescope-x86_64.AppImage
+./appimagetool "Telescope-Nightly.AppDir" Telescope-Nightly-x86_64.AppImage
 
 echo "AppImage created: Telescope-Nightly-x86_64.AppImage"
