@@ -34,7 +34,11 @@ install_client_multi() {
 install_client() {
     local repo=$1
     local revision=$2
-    install_client_multi "$repo" "${repo//-/_}" "$revision"
+		if [ -n "$revision" ]; then
+			install_client_multi "$repo" "${repo//-/_}" "$revision"
+		else
+			install_client_multi "$repo" "${repo//-/_}"
+		fi
 }
 
 # Function to install the server with glibc
@@ -42,10 +46,10 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-		if [ "$revision" ]; then
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
+		if [ -z "$revision" ]; then
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --root "Telescope.AppDir/usr"
 		else
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --branch "main" --root "Telescope.AppDir/usr"
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 		fi
 }
 
