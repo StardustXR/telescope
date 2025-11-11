@@ -83,3 +83,9 @@ jobs:
         with:
           name: Telescope-x86_64.AppImage
           path: Telescope-x86_64.AppImage
+
+      - name: Upload Nightly AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telescope-Nightly-x86_64.AppImage
+          path: Telescope-Nightly-x86_64.AppImage
