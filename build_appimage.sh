@@ -5,13 +5,15 @@ set -x
 # Function to install a repository with musl and custom binary name
 install_client_multi() {
     local repo=$1
-    local revision=$2
-    local package_name=$3
+    local package_name=$2
+    local revision=$3
 
     echo "Installing $repo with musl..."
     git clone "https://github.com/StardustXR/$repo.git" "$repo"
     local repo_dir="$repo"
-    git -C "$repo_dir" checkout "$revision"
+		if [ "$revision" ]; then
+			git -C "$repo_dir" checkout "$revision"
+		fi
 
     # install resources
     if [ -d "$repo_dir/res" ]; then
@@ -26,14 +28,13 @@ install_client_multi() {
 
     cargo install --locked --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
 
-
     rm -rf "$repo"
 }
 # Function to install a repository with musl
 install_client() {
     local repo=$1
     local revision=$2
-    install_client_multi "$repo" "$revision" "${repo//-/_}"
+    install_client_multi "$repo" "${repo//-/_}" "$revision"
 }
 
 # Function to install the server with glibc
@@ -41,7 +42,11 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-    cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
+		if [ "$revision" ]; then
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope-Nightly.AppDir/usr"
+		else
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --branch "main" --root "Telescope-Nightly.AppDir/usr"
+		fi
 }
 
 # Function to include system libraries in the AppImage
@@ -52,7 +57,8 @@ include_system_library() {
 }
 
 # Create AppDir structure
-mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir/usr/share"
+# takes less code to just have the thing there
+cp -rf AppDir Telescope.AppDir
 
 # Include system libraries
 # include_system_library "libxkbcommon.so.0"
@@ -86,56 +92,24 @@ mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir
 # include_system_library "libpcre2-8.so.0"
 
 # Install server with glibc
-install_server "71c30a05b87a8f23929ad380b3fa195b693bb4fa"
+install_server
 
 # Install clients with musl
-install_client "flatland" "0914dd3df54a5e6258dfc0a02d65af1c0fc0fc90"
-install_client_multi "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219" "hexagon_launcher"
-install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
-install_client "black-hole" "0b847b6ddc383bfcc1e133a2238a37ce8202fe95"
+install_client "flatland" 
+install_client_multi "protostar" "hexagon_launcher"
+install_client "gravity"
+install_client "black-hole"
 
-# Create startup script
-cat << EOF > "Telescope.AppDir/usr/bin/startup_script"
-#!/bin/bash
-export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
-# xwayland-satellite :10 &
-# export DISPLAY=:10
-
-\$TELESCOPE_PATH/flatland &
-\$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
-\$TELESCOPE_PATH/black-hole &
-EOF
-chmod +x "Telescope.AppDir/usr/bin/startup_script"
-
-# Create AppRun script
-cat << EOF > "Telescope.AppDir/AppRun"
-#!/bin/bash
-export TELESCOPE_PATH="\$APPDIR/usr/bin"
-export OLD_LD_LIBRARY_PATH="\$LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH="\$APPDIR/usr/lib:\$OLD_LD_LIBRARY_PATH"
-export STARDUST_THEMES="\$APPDIR/usr/share"
-
-\$TELESCOPE_PATH/stardust-xr-server -o 1 -e "\$TELESCOPE_PATH/startup_script" \$@
-EOF
-chmod +x "Telescope.AppDir/AppRun"
-
-# Create desktop file
-cat << EOF > "Telescope.AppDir/telescope.desktop"
-[Desktop Entry]
-Name=Telescope
-Exec=AppRun
-Icon=stardust
-Type=Application
-Categories=Utility;
-EOF
-
-# Download icon
-wget https://raw.githubusercontent.com/StardustXR/assets/main/icon.png -O "Telescope.AppDir/stardust.png"
 
 # Create tarball of AppDir
 tar -czvf Telescope-x86_64.tar.gz Telescope.AppDir
 
 # Create AppImage
+if [ ! -e "./appimagetool" ]; then
+	wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage -O appimagetool
+	chmod u+x appimagetool
+fi
+
 ./appimagetool "Telescope.AppDir" Telescope-x86_64.AppImage
 
 echo "AppImage created: Telescope-x86_64.AppImage"
