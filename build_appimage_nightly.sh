@@ -100,4 +100,4 @@ if [ ! -e "./appimagetool" ]; then
 fi
 ./appimagetool "Telescope-Nightly.AppDir" Telescope-x86_64.AppImage
 
-echo "AppImage created: Telescope-x86_64.AppImage"
+echo "AppImage created: Telescope-Nightly-x86_64.AppImage"
