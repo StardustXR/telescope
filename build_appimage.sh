@@ -43,9 +43,9 @@ install_server() {
 
     echo "Installing server with glibc..."
 		if [ "$revision" ]; then
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope-Nightly.AppDir/usr"
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 		else
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --branch "main" --root "Telescope-Nightly.AppDir/usr"
+			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --branch "main" --root "Telescope.AppDir/usr"
 		fi
 }
 
