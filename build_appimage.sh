@@ -86,13 +86,13 @@ mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir
 # include_system_library "libpcre2-8.so.0"
 
 # Install server with glibc
-install_server "71c30a05b87a8f23929ad380b3fa195b693bb4fa"
+install_server "a7aadc4538ea2d2db358856d39f35c20c72a8ee9"
 
 # Install clients with musl
-install_client "flatland" "0914dd3df54a5e6258dfc0a02d65af1c0fc0fc90"
-install_client_multi "protostar" "39499a061af74c3a2d5e1e46e4ad21aca5727219" "hexagon_launcher"
-install_client "gravity" "96787ed3139717ea6061f6e259e9fed3e483274a"
-install_client "black-hole" "0b847b6ddc383bfcc1e133a2238a37ce8202fe95"
+install_client "flatland" "63e060a7899f4113ec6f19510656a0fc1d6940b8"
+install_client_multi "protostar" "15f77807a5f617341bd36f69174ea00f5550d131" "hexagon_launcher"
+install_client "gravity" "3283bf8b352cdcb04ef3e0edb5155c4ca8c5c97c"
+install_client "black-hole" "5abca9d613fac7861803319b3191061b2d8ce067"
 
 # Create startup script
 cat << EOF > "Telescope.AppDir/usr/bin/startup_script"
@@ -115,7 +115,7 @@ export OLD_LD_LIBRARY_PATH="\$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="\$APPDIR/usr/lib:\$OLD_LD_LIBRARY_PATH"
 export STARDUST_THEMES="\$APPDIR/usr/share"
 
-\$TELESCOPE_PATH/stardust-xr-server -o 1 -e "\$TELESCOPE_PATH/startup_script" \$@
+\$TELESCOPE_PATH/stardust-xr-server -o 6 -e "\$TELESCOPE_PATH/startup_script" \$@
 EOF
 chmod +x "Telescope.AppDir/AppRun"
 
