@@ -24,7 +24,7 @@ install_client_multi() {
         repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --locked --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
+    cargo install --locked --path "$repo_dir" --root "Telescope.AppDir/usr"
 
 
     rm -rf "$repo"
@@ -41,7 +41,7 @@ install_server() {
     local revision=$1
 
     echo "Installing server with glibc..."
-    cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
+    cargo install --locked --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 }
 
 # Function to include system libraries in the AppImage
@@ -85,25 +85,30 @@ mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir
 # include_system_library "libbrotlicommon.so.1"
 # include_system_library "libpcre2-8.so.0"
 
-# Install server with glibc
-install_server "a7aadc4538ea2d2db358856d39f35c20c72a8ee9"
+install_server "0.50.0"
 
-# Install clients with musl
-install_client "flatland" "63e060a7899f4113ec6f19510656a0fc1d6940b8"
-install_client_multi "protostar" "15f77807a5f617341bd36f69174ea00f5550d131" "hexagon_launcher"
-install_client "gravity" "3283bf8b352cdcb04ef3e0edb5155c4ca8c5c97c"
-install_client "black-hole" "5abca9d613fac7861803319b3191061b2d8ce067"
+install_client "flatland" "0.50.0"
+install_client_multi "protostar" "0.50.0" "hexagon_launcher"
+install_client "gravity" "0.50.0"
+install_client "black-hole" "0.50.0"
+
+install_client_multi "non-spatial-input" "0.50.0" "manifold"
+install_client_multi "non-spatial-input" "0.50.0" "simular"
+
+cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --rev "v0.7" --root "Telescope.AppDir/usr"
 
 # Create startup script
 cat << EOF > "Telescope.AppDir/usr/bin/startup_script"
 #!/bin/bash
 export LD_LIBRARY_PATH="\$OLD_LD_LIBRARY_PATH"
-# xwayland-satellite :10 &
-# export DISPLAY=:10
+xwayland-satellite :10 &
+export DISPLAY=:10
 
 \$TELESCOPE_PATH/flatland &
 \$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
 \$TELESCOPE_PATH/black-hole &
+
+WAYLAND_DISPLAY=\$FLAT_WAYLAND_DISPLAY \$TELESCOPE_PATH/manifold | \$TELESCOPE_PATH/simular &
 EOF
 chmod +x "Telescope.AppDir/usr/bin/startup_script"
 
