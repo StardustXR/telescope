@@ -91,6 +91,7 @@ install_client "flatland" "0.50.0"
 install_client_multi "protostar" "0.50.0" "hexagon_launcher"
 install_client "gravity" "0.50.0"
 install_client "black-hole" "0.50.0"
+install_client "solar-sailer" "0.50.0"
 
 install_client_multi "non-spatial-input" "0.50.0" "manifold"
 install_client_multi "non-spatial-input" "0.50.0" "simular"
@@ -106,6 +107,7 @@ export DISPLAY=:10
 
 \$TELESCOPE_PATH/flatland &
 \$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 \$TELESCOPE_PATH/hexagon_launcher &
+\$TELESCOPE_PATH/gravity -- 0 0.1 -0.5 \$TELESCOPE_PATH/solar-sailer &
 \$TELESCOPE_PATH/black-hole &
 
 WAYLAND_DISPLAY=\$FLAT_WAYLAND_DISPLAY \$TELESCOPE_PATH/manifold | \$TELESCOPE_PATH/simular &
