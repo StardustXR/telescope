@@ -26,7 +26,7 @@ install_client_multi() {
         repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --locked --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope.AppDir/usr"
+    cargo install --locked --path "$repo_dir" --root "Telescope.AppDir/usr"
 
     rm -rf "$repo"
 }
@@ -47,9 +47,9 @@ install_server() {
 
     echo "Installing server with glibc..."
 		if [ -z "$revision" ]; then
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --root "Telescope.AppDir/usr"
+			cargo install --locked --git "https://github.com/StardustXR/server.git" --root "Telescope.AppDir/usr"
 		else
-			cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
+			cargo install --locked --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
 		fi
 }
 
@@ -103,6 +103,12 @@ install_client "flatland"
 install_client_multi "protostar" "hexagon_launcher"
 install_client "gravity"
 install_client "black-hole"
+install_client "solar-sailer"
+
+install_client_multi "non-spatial-input" "manifold"
+install_client_multi "non-spatial-input" "simular"
+
+cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --rev "v0.7" --root "Telescope.AppDir/usr"
 
 
 # Create tarball of AppDir
