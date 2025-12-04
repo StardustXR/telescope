@@ -6,18 +6,15 @@ set -x
 install_client_multi() {
     local repo=$1
     local package_name=$2
-    local revision=$3
 
     echo "Installing $repo with musl..."
     git clone "https://github.com/StardustXR/$repo.git" "$repo"
     local repo_dir="$repo"
-		if [ "$revision" ]; then
-			git -C "$repo_dir" checkout "$revision"
-		fi
+    git -C "$repo_dir" switch dev
 
     # install resources
     if [ -d "$repo_dir/res" ]; then
-        cp -r "$repo_dir/res"/* "Telescope.AppDir/usr/share/"
+        cp -r "$repo_dir/res"/* "Telescope-Nightly.AppDir/usr/share/"
     fi
 
     # Check if it's a workspace or a single package
@@ -26,43 +23,32 @@ install_client_multi() {
         repo_dir="$repo_dir/$package_name"
     fi
 
-    cargo install --locked --path "$repo_dir" --root "Telescope.AppDir/usr"
+    cargo install --locked --path "$repo_dir" --target x86_64-unknown-linux-musl --root "Telescope-Nightly.AppDir/usr"
 
     rm -rf "$repo"
 }
 # Function to install a repository with musl
 install_client() {
     local repo=$1
-    local revision=$2
-		if [ -n "$revision" ]; then
-			install_client_multi "$repo" "${repo//-/_}" "$revision"
-		else
-			install_client_multi "$repo" "${repo//-/_}"
-		fi
+    install_client_multi "$repo" "${repo//-/_}"
 }
 
 # Function to install the server with glibc
 install_server() {
-    local revision=$1
-
     echo "Installing server with glibc..."
-		if [ -z "$revision" ]; then
-			cargo install --locked --git "https://github.com/StardustXR/server.git" --root "Telescope.AppDir/usr"
-		else
-			cargo install --locked --git "https://github.com/StardustXR/server.git" --rev "$revision" --root "Telescope.AppDir/usr"
-		fi
+		cargo install --locked --target x86_64-unknown-linux-gnu --git "https://github.com/StardustXR/server.git" --branch "dev" --root "Telescope-Nightly.AppDir/usr"
 }
 
 # Function to include system libraries in the AppImage
 include_system_library() {
     local library=$1
     echo "Including system library: $library"
-    cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "Telescope.AppDir/usr/lib/"
+    cp -L $(ldconfig -p | grep "$library" | awk '{print $NF}' | head -n 1) "Telescope-Nightly.AppDir/usr/lib/"
 }
 
 # Create AppDir structure
 # takes less code to just have the thing there
-cp -rf AppDir Telescope.AppDir
+cp -rf AppDir Telescope-Nightly.AppDir
 
 # Include system libraries
 # include_system_library "libxkbcommon.so.0"
@@ -99,27 +85,19 @@ cp -rf AppDir Telescope.AppDir
 install_server
 
 # Install clients with musl
-install_client "flatland" 
+install_client "flatland"
 install_client_multi "protostar" "hexagon_launcher"
 install_client "gravity"
 install_client "black-hole"
-install_client "solar-sailer"
-
-install_client_multi "non-spatial-input" "manifold"
-install_client_multi "non-spatial-input" "simular"
-
-cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --rev "v0.7" --root "Telescope.AppDir/usr"
-
 
 # Create tarball of AppDir
-tar -czvf Telescope-x86_64.tar.gz Telescope.AppDir
+tar -czvf Telescope-x86_64.tar.gz Telescope-Nightly.AppDir
 
 # Create AppImage
 if [ ! -e "./appimagetool" ]; then
 	wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage -O appimagetool
 	chmod u+x appimagetool
 fi
+./appimagetool "Telescope-Nightly.AppDir" Telescope-Nightly-x86_64.AppImage
 
-./appimagetool "Telescope.AppDir" Telescope-x86_64.AppImage
-
-echo "AppImage created: Telescope-x86_64.AppImage"
+echo "AppImage created: Telescope-Nightly-x86_64.AppImage"

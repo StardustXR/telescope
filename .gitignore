@@ -1,2 +1,6 @@
 result/
 *.AppImage
+Telescope*.AppDir
+protostar
+*.tar.gz
+appimagetool
