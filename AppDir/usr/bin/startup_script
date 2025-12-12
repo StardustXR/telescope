@@ -1,0 +1,8 @@
+#!/bin/sh
+export LD_LIBRARY_PATH="$OLD_LD_LIBRARY_PATH"
+# xwayland-satellite :10 &
+# export DISPLAY=:10
+
+$TELESCOPE_PATH/flatland &
+$TELESCOPE_PATH/gravity -- 0 0.0 -0.5 $TELESCOPE_PATH/hexagon_launcher &
+$TELESCOPE_PATH/black-hole &
