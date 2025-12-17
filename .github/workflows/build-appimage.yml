@@ -67,6 +67,11 @@ jobs:
           chmod +x build_appimage.sh
           ./build_appimage.sh
 
+      - name: Build Nightly AppImage based on dev
+        run: |
+          chmod +x build_appimage.sh
+          ./build_appimage_nightly.sh
+
       - name: Upload AppDir
         uses: actions/upload-artifact@v4
         with:
@@ -78,3 +83,9 @@ jobs:
         with:
           name: Telescope-x86_64.AppImage
           path: Telescope-x86_64.AppImage
+
+      - name: Upload Nightly AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telescope-Nightly-x86_64.AppImage
+          path: Telescope-Nightly-x86_64.AppImage
