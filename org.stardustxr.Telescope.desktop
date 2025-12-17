@@ -5,3 +5,4 @@ Exec=telescope
 Type=Application
 Icon=org.stardustxr.Telescope
 Categories=Utility;X-WiVRn-VR;
+X-XR-Plugin=true
