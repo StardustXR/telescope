@@ -130,10 +130,12 @@ chmod +x "Telescope.AppDir/AppRun"
 cat << EOF > "Telescope.AppDir/telescope.desktop"
 [Desktop Entry]
 Name=Telescope
+Comment=StardustXR based OpenXR Overlay
 Exec=AppRun
-Icon=stardust
 Type=Application
-Categories=Utility;
+Icon=org.stardustxr.Telescope
+Categories=Utility;X-WiVRn-VR;
+X-XR-Plugin=true
 EOF
 
 # Download icon
