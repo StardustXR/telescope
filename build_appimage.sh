@@ -85,7 +85,7 @@ mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir
 # include_system_library "libbrotlicommon.so.1"
 # include_system_library "libpcre2-8.so.0"
 
-install_server "0.50.0"
+install_server "0.50.2"
 
 install_client "flatland" "0.50.0"
 install_client_multi "protostar" "0.50.0" "hexagon_launcher"
