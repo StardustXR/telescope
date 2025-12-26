@@ -41,7 +41,7 @@ jobs:
       - name: Install Stardust/Rust dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pkg-config libfuse2t64 libfontconfig1-dev vulkan-tools libvulkan1 libxcb-ewmh-dev libxfixes-dev libxcb-icccm4-dev libxcb-res0-dev libxkbcommon-dev xwayland wayland-protocols wayland-utils
+          sudo apt-get install -y pkg-config libfuse2t64 libfontconfig1-dev vulkan-tools libvulkan1 libxcb-ewmh-dev libxfixes-dev libxcb-icccm4-dev libxcb-res0-dev libxkbcommon-dev xwayland wayland-protocols wayland-utils libwayland-client0 libwayland-client++1
 
       - name: Set up Rust (gnu)
         uses: actions-rs/toolchain@v1
