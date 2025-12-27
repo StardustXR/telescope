@@ -25,7 +25,7 @@ jobs:
       - name: Install Stardust/Rust dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libx11-dev
+          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev
 
       - name: Set up Rust (gnu)
         uses: actions-rs/toolchain@v1
