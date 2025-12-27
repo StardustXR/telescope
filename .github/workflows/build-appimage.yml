@@ -22,26 +22,10 @@ jobs:
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.9
 
-      - name: Install OpenXR SDK dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake libgl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev
-
-      - name: Build and Install OpenXR SDK
-        run: |
-          wget https://github.com/KhronosGroup/OpenXR-SDK/archive/refs/tags/release-1.1.36.tar.gz
-          tar xzf release-1.1.36.tar.gz
-          cd OpenXR-SDK-release-1.1.36
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          make
-          sudo make install
-
       - name: Install Stardust/Rust dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0
+          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev
 
       - name: Set up Rust (gnu)
         uses: actions-rs/toolchain@v1
