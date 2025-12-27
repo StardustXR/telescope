@@ -34,13 +34,6 @@ jobs:
           profile: minimal
           target: x86_64-unknown-linux-gnu
 
-      - name: Set up Rust (musl)
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          target: x86_64-unknown-linux-musl
-
       - name: Download appimagetool
         run: |
           wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage -O appimagetool
