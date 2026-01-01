@@ -87,7 +87,7 @@ mkdir -p "Telescope.AppDir/usr/bin" "Telescope.AppDir/usr/lib" "Telescope.AppDir
 
 install_server "0.50.2"
 
-install_client "flatland" "0.50.0"
+install_client "flatland" "0.50.1"
 install_client_multi "protostar" "0.50.0" "hexagon_launcher"
 install_client "gravity" "0.50.0"
 install_client "black-hole" "0.50.0"
