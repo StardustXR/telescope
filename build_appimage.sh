@@ -96,7 +96,7 @@ install_client "solar-sailer" "0.50.0"
 install_client_multi "non-spatial-input" "0.50.0" "manifold"
 install_client_multi "non-spatial-input" "0.50.0" "simular"
 
-cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --rev "v0.7" --root "Telescope.AppDir/usr"
+cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --rev "v0.8" --root "Telescope.AppDir/usr"
 
 # Create startup script
 cat << EOF > "Telescope.AppDir/usr/bin/startup_script"
