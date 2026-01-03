@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  release:
+    types: [created]
 
 env:
   APPDIR: StardustXR-Telescope.AppDir
@@ -55,3 +57,10 @@ jobs:
         with:
           name: Telescope-x86_64.AppImage
           path: Telescope-x86_64.AppImage
+
+      - name: Upload AppImage to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Telescope-x86_64.AppImage
