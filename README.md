@@ -25,6 +25,11 @@ On NixOS, use the [Nix package manager](https://nixos.org/download/#nix-install-
 ```
 nix run github:StardustXR/telescope
 ```
+For other distros (incl. Bazzite), Stardust XR is available in the [Homebrew XR Tap](https://tangled.org/matrixfurry.com/homebrew-xr) (note: this will set up [Homebrew](https://brew.sh) automatically if it's not installed):
+
+```
+bash -c "$(curl -fsSL https://tangled.org/matrixfurry.com/homebrew-xr/raw/main/scripts/setup.sh)"; brew trust matrixfurry.com/xr/stardust-xr-telescope; brew install stardust-xr-telescope
+```
 
 An [appimage](https://github.com/StardustXR/telescope/releases) is also available for download
 
